@@ -32,5 +32,8 @@
     "presets": [
       "env"
     ]
+  },
+  "devDependencies": {
+    "eslint": "5.16.0"
   }
 }
