@@ -20,6 +20,7 @@
   },
   "plugins": ["react"],
   "rules": {
+    "no-console": 0,
     "react/react-in-jsx-scope": 0,
     "react/no-unescaped-entities": 0
   }
