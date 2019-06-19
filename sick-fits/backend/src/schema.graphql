@@ -1,7 +1,7 @@
 type Mutation {
-  hi: String
+  placeholder: String
 }
 
 type Query {
-  hi: String
+  placeholder: String
 }
