@@ -42,7 +42,7 @@ class DeleteItem extends Component {
         variables={{ id: this.props.id }}
         update={this.update}
       >
-        {(deleteItem, { error }) => {
+        {deleteItem => {
           return (
             <button onClick={e => this.handleClick(e, deleteItem)}>
               {this.props.children}
