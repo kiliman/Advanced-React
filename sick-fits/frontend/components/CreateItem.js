@@ -40,6 +40,15 @@ class CreateItem extends Component {
     this.setState({ [name]: val })
   }
 
+  handleSubmit = async (e, createItem) => {
+    e.preventDefault()
+    const res = await createItem()
+    Router.push({
+      pathname: '/item',
+      query: { id: res.data.createItem.id },
+    })
+  }
+
   uploadFile = async e => {
     console.log('uploading file...')
     const files = e.target.files
@@ -66,16 +75,7 @@ class CreateItem extends Component {
     return (
       <Mutation mutation={CREATE_ITEM_MUTATION} variables={this.state}>
         {(createItem, { loading, error }) => (
-          <Form
-            onSubmit={async e => {
-              e.preventDefault()
-              const res = await createItem()
-              Router.push({
-                pathname: '/item',
-                query: { id: res.data.createItem.id },
-              })
-            }}
-          >
+          <Form onSubmit={e => this.handleSubmit(e, createItem)}>
             <ErrorMessage error={error} />
             <fieldset disabled={loading} aria-busy={loading}>
               <label htmlFor="file">
