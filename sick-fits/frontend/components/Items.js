@@ -9,8 +9,8 @@ import Pagination from './Pagination'
 import Item from './Item'
 
 const ALL_ITEMS_QUERY = gql`
-  query ALL_ITEMS_QUERY($skip: Int = 0) {
-    items(skip: $skip, orderBy: createdAt_DESC) {
+  query ALL_ITEMS_QUERY($skip: Int = 0, $first: Int = ${perPage}) {
+    items(skip: $skip, first: $first, orderBy: createdAt_DESC) {
       id
       title
       price
@@ -45,7 +45,7 @@ class Items extends Component {
         <Pagination page={page} />
         <Query
           query={ALL_ITEMS_QUERY}
-          variables={{ skip: (page - 1) * perPage }}
+          variables={{ skip: (page - 1) * perPage, first: perPage }}
         >
           {({ data, error, loading }) => {
             if (loading) return <p>Loading...</p>
