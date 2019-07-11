@@ -50,15 +50,36 @@ const Mutations = {
       },
       info,
     )
-    // create JWT token
-    const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET)
-    // set the cookie
-    ctx.response.cookie('token', token, {
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 365, // 1 year
-    })
+    setToken(ctx, user)
     return user
   },
+
+  async signin(parent, { email, password }, ctx) {
+    email = email.toLowerCase()
+    // hash their password
+    const user = await ctx.db.query.user({ where: { email } })
+    if (!user) {
+      throw new Error(`No such user found for email ${email}`)
+    }
+    // compare signin hash with stored hash
+    const valid = await bcrypt.compare(password, user.password)
+    if (!valid) {
+      throw new Error('Invalid email or password')
+    }
+    setToken(ctx, user)
+
+    return user
+  },
+}
+
+const setToken = (ctx, user) => {
+  // create JWT token
+  const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET)
+  // set the cookie
+  ctx.response.cookie('token', token, {
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60 * 24 * 365, // 1 year
+  })
 }
 
 module.exports = Mutations
