@@ -36,4 +36,6 @@ type Query {
   itemsConnection(where: ItemWhereInput): ItemConnection!
 
   me: User
+
+  user: User
 }
