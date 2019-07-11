@@ -8,6 +8,7 @@ type Mutation {
     image: String
     largeImage: String
   ): Item!
+
   updateItem(
     id: ID!
     title: String
@@ -16,6 +17,7 @@ type Mutation {
     image: String
     largeImage: String
   ): Item!
+
   deleteItem(id: ID!): Item
 }
 
@@ -26,6 +28,8 @@ type Query {
     skip: Int
     first: Int
   ): [Item]!
+
   item(where: ItemWhereUniqueInput!): Item
+
   itemsConnection(where: ItemWhereInput): ItemConnection!
 }
