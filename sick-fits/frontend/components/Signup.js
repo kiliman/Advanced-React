@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Mutation } from 'react-apollo'
+import Router from 'next/router'
 import gql from 'graphql-tag'
 import Form from './styles/Form'
 import ErrorMessage from './ErrorMessage'
@@ -34,8 +35,13 @@ class Signup extends Component {
 
   handleSubmit = async (e, signup) => {
     e.preventDefault()
-    await signup()
+    const user = await signup()
     this.setState({ email: '', name: '', password: '' })
+    if (user) {
+      Router.push({
+        pathname: '/me',
+      })
+    }
   }
 
   render() {

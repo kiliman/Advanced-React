@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Mutation } from 'react-apollo'
+import Router from 'next/router'
 import gql from 'graphql-tag'
 import Form from './styles/Form'
 import ErrorMessage from './ErrorMessage'
@@ -29,8 +30,13 @@ class Signin extends Component {
 
   handleSubmit = async (e, signin) => {
     e.preventDefault()
-    await signin()
+    const user = await signin()
     this.setState({ email: '', password: '' })
+    if (user) {
+      Router.push({
+        pathname: '/me',
+      })
+    }
   }
 
   render() {
