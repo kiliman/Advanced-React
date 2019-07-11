@@ -70,6 +70,11 @@ const Mutations = {
 
     return user
   },
+
+  async signout(parent, args, ctx) {
+    ctx.response.clearCookie('token')
+    return { message: 'Successfully signed out' }
+  },
 }
 
 const setToken = (ctx, user) => {
