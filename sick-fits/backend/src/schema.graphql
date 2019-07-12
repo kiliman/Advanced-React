@@ -29,6 +29,8 @@ type Mutation {
   signin(email: String!, password: String!): User!
 
   signout: SuccessMessage
+
+  requestReset(email: String!): SuccessMessage
 }
 
 type Query {
@@ -46,4 +48,11 @@ type Query {
   me: User
 
   user: User
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  permissions: [Permission!]!
 }
