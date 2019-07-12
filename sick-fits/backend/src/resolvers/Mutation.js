@@ -101,6 +101,45 @@ const Mutations = {
 
     return { message: `Password reset link sent to ${email} ${resetToken}` }
   },
+  async resetPassword(
+    parent,
+    { resetToken, password, confirmPassword },
+    ctx,
+    info,
+  ) {
+    // 1. Check if the password match
+    if (password !== confirmPassword) {
+      throw new Error(`Your new passwords don't match. Please try again.`)
+    }
+    // 2. Check if the reset token exists
+    const [user] = await ctx.db.query.users({
+      where: {
+        resetToken,
+        resetTokenExpiry_gte: Date.now() - 3600000,
+      },
+    })
+    if (!user) {
+      throw new Error(`Invalid or expired reset token`)
+    }
+    // 3. Hash their new password
+    const hash = await bcrypt.hash(password, 10)
+
+    // 4. Save new password and reset tokens
+    const res = await ctx.db.mutation.updateUser({
+      where: { id: user.id },
+      data: {
+        password: hash,
+        resetToken: null,
+        resetTokenExpiry: null,
+      },
+    })
+
+    // 5. Set token
+    setToken(ctx, user)
+
+    // 6. Return user
+    return user
+  },
 }
 
 const setToken = (ctx, user) => {
